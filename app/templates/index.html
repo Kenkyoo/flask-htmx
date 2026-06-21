@@ -1,19 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flask HTMX ALPINE App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <!-- HTMX -->
     <script src="https://unpkg.com/htmx.org@1.5.0"></script>
     <style>
-        body{
-            padding: 20px;
+        body {
+            background-color: #1e1e2e;
+            color: #cdd6f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 40px;
+            padding-bottom: 40px;
         }
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
+        
+        .card {
+            background-color: #252538;
+            border: 1px solid #313244;
+            border-radius: 12px;
+        }
+
+        .form-control {
+            background-color: #181825;
+            border: 1px solid #45475a;
+            color: #cdd6f4;
+        }
+
+        .form-control:focus {
+            background-color: #1e1e2e;
+            color: #fff;
+            border-color: #89b4fa;
+            box-shadow: 0 0 0 0.25rem rgba(137, 180, 250, 0.25);
+        }
+
+        .form-control::placeholder {
+            color: #6c7086;
         }
 
         tr.htmx-swapping td {
@@ -21,53 +44,81 @@
             transition: opacity 0.5s ease-out;
         }
 
-        td, th {
-            border: 1px solid #383737;
-            text-align: left;
-            padding: 8px;
+        .table th {
+            border-top: none;
+            color: #89b4fa;
         }
 
-        tr:nth-child(even) {
-            background-color: #dddddd;
+        .table td {
+            vertical-align: middle;
         }
     </style>
 </head>
 
- <body>
-    <h1>Book Recommendations</h1>
-    <form hx-post="/submit" hx-swap="beforeend" hx-target="#new-book" class="mb-3">
-        <input type="text" placeholder="Book Title" name="title" class="form-control mb-3" />
-        <input type="text" placeholder="Book Author" name="author" class="form-control mb-3" />
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                
+                <div class="d-flex align-items-center mb-4">
+                    <h1 class="fw-bold m-0" style="color: #b4befe;">Book Recommendations</h1>
+                </div>
 
-    <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Book Title</th>
-            <th scope="col">Book Author</th>
-          </tr>
-        </thead>
-        <tbody id="new-book" hx-target="closest tr" hx-swap="outerHTML swap:0.5s"> 
-            
-{% for book in books %}
-            <tr>
-                <td>{{book.Book.title}}</td>
-                <td>{{book.Author.name}}</td>
-                <td>
-                    <button class="btn btn-primary" 
-                        hx-get="/get-edit-form/{{book.Book.book_id}}">
-                        Edit Title
-                    </button>
-                </td>
-                <td>
-                    <button hx-delete="/delete/{{book.Book.book_id}}" class="btn btn-primary">Delete</button>
-                </td>
-            </tr>
-            {% endfor %}
+                <div class="card p-4 mb-5 shadow-sm">
+                    <h5 class="card-title mb-3 fw-semibold text-white">Add New Recommendation</h5>
+                    <form hx-post="/submit" hx-swap="beforeend" hx-target="#new-book">
+                        <div class="row g-3">
+                            <div class="col-sm-5">
+                                <input type="text" placeholder="Book Title" name="title" class="form-control" required />
+                            </div>
+                            <div class="col-sm-5">
+                                <input type="text" placeholder="Book Author" name="author" class="form-control" required />
+                            </div>
+                            <div class="col-sm-2 d-grid">
+                                <button type="submit" class="btn btn-primary fw-semibold" style="background-color: #89b4fa; border: none; color: #11111b;">Submit</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
-        </tbody>
-    </table>
+                <div class="card p-3 shadow-sm">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover m-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width: 45%;">Book Title</th>
+                                    <th scope="col" style="width: 35%;">Book Author</th>
+                                    <th scope="col" style="width: 10%; text-align: center;">Edit</th>
+                                    <th scope="col" style="width: 10%; text-align: center;">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody id="new-book" hx-target="closest tr" hx-swap="outerHTML swap:0.5s"> 
+                                
+                                {% for book in books %}
+                                <tr>
+                                    <td class="text-white fw-medium">{{book.Book.title}}</td>
+                                    <td class="text-muted">{{book.Author.name}}</td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-info" 
+                                            hx-get="/get-edit-form/{{book.Book.book_id}}">
+                                            Edit
+                                        </button>
+                                    </td>
+                                    <td class="text-center">
+                                        <button hx-delete="/delete/{{book.Book.book_id}}" class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </body>
-
 </html>

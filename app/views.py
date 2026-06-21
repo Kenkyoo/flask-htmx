@@ -35,17 +35,17 @@ def submit():
 
     response = f"""
     <tr>
-        <td>{title}</td>
-        <td>{author_name}</td>
-        <td>
-            <button class="btn btn-primary"
+        <td class="text-white fw-medium">{title}</td>
+        <td class="text-muted">{author_name}</td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline-info"
                 hx-get="/get-edit-form/{global_book_object.book_id}">
-                Edit Title
+                Edit
             </button>
         </td>
-        <td>
+        <td class="text-center">
             <button hx-delete="/delete/{global_book_object.book_id}"
-                class="btn btn-primary">
+                class="btn btn-sm btn-outline-danger">
                 Delete
             </button>
         </td>
@@ -68,16 +68,20 @@ def get_edit_form(id):
 
     response = f"""
     <tr hx-trigger='cancel' class='editing' hx-get="/get-book-row/{id}">
-  <td><input name="title" value="{book.title}"/></td>
-  <td>{author.name}</td>
-  <td>
-    <button class="btn btn-primary" hx-get="/get-book-row/{id}">
-      Cancel
-    </button>
-    <button class="btn btn-primary" hx-put="/update/{id}" hx-include="closest tr">
-      Save
-    </button>
-  </td>
+        <td>
+            <input name="title" value="{book.title}" class="form-control form-control-sm text-white" style="background-color: #181825; border: 1px solid #89b4fa;"/>
+        </td>
+        <td class="text-muted" style="vertical-align: middle;">{author.name}</td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline-secondary" hx-get="/get-book-row/{id}">
+                Cancel
+            </button>
+        </td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-success" hx-put="/update/{id}" hx-include="closest tr" style="background-color: #a6e3a1; border: none; color: #11111b; font-weight: 600;">
+                Save
+            </button>
+        </td>
     </tr>
     """
     return response
@@ -89,17 +93,17 @@ def get_book_row(id):
 
     response = f"""
     <tr>
-        <td>{book.title}</td>
-        <td>{author.name}</td>
-        <td>
-            <button class="btn btn-primary"
+        <td class="text-white fw-medium">{book.title}</td>
+        <td class="text-muted">{author.name}</td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline-info"
                 hx-get="/get-edit-form/{id}">
-                Edit Title
+                Edit
             </button>
         </td>
-        <td>
+        <td class="text-center">
             <button hx-delete="/delete/{id}"
-                class="btn btn-primary">
+                class="btn btn-sm btn-outline-danger">
                 Delete
             </button>
         </td>
@@ -118,17 +122,17 @@ def update_book(id):
 
     response = f"""
     <tr>
-        <td>{title}</td>
-        <td>{author.name}</td>
-        <td>
-            <button class="btn btn-primary"
+        <td class="text-white fw-medium">{title}</td>
+        <td class="text-muted">{author.name}</td>
+        <td class="text-center">
+            <button class="btn btn-sm btn-outline-info"
                 hx-get="/get-edit-form/{id}">
-                Edit Title
+                Edit
             </button>
         </td>
-        <td>
+        <td class="text-center">
             <button hx-delete="/delete/{id}"
-                class="btn btn-primary">
+                class="btn btn-sm btn-outline-danger">
                 Delete
             </button>
         </td>
